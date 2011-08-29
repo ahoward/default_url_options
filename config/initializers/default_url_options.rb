@@ -32,14 +32,15 @@ def DefaultUrlOptions.configure!(request = {})
   default_url_options = DefaultUrlOptions
   return if configured?
 
-  if request.respond_to?(:protocol)
-    protocol = request.protocol
-    host = request.host
-    port = request.port
-  else
-    protocol = request[:protocol] || request['protocol']
+  if request.is_a?(Hash)
     host = request[:host] || request['host']
     port = request[:port] || request['port']
+    protocol = request[:protocol] || request['protocol']
+  else
+    host = request.host
+    port = request.port
+    protocol = DefaultUrlOptions.protocol
+    # protocol = request.protocol
   end
 
   host.gsub!(/^www\./, '') if host
@@ -57,10 +58,6 @@ def DefaultUrlOptions.configure!(request = {})
   default_url_options
 ensure
   configured!
-end
-
-def DefaultUrlOptions.configured=(boolean)
-  @configured = !!boolean
 end
 
 def DefaultUrlOptions.configured!
@@ -99,7 +96,7 @@ end
 
 DefaultUrlOptions.configure!(
   :protocol => 'http',
-  :host => 'blipsnips.com'
+  :host => 'default.domain.com'
 )
 
 DefaultUrlOptions.configured = 0 # lie so first request re-initializes
