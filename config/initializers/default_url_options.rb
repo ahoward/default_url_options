@@ -59,6 +59,7 @@ ensure
   configured!
 end
 
+#Why is this here?...
 def DefaultUrlOptions.configured=(boolean)
   @configured = !!boolean
 end
@@ -72,10 +73,12 @@ def DefaultUrlOptions.configured
   @configured ||= 0
 end
 
+#... When this immediately redefines it?
 def DefaultUrlOptions.configured=(value)
   @configured = Integer(value) 
 end
 
+#... and then the latter is the only one which makes sense here?
 def DefaultUrlOptions.configured?
   @configured ||= 0
   @configured != 0
